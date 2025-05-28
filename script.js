@@ -1,4 +1,57 @@
+// Configuration
+const AIRTABLE_CONFIG = {
+    API_KEY: 'YOUR_API_KEY', // Replace with your Airtable API key
+    BASE_ID: 'YOUR_BASE_ID', // Replace with your base ID
+    TABLE_NAME: 'Signups'
+};
+
+// Toast notification helper
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    // Trigger reflow for animation
+    toast.offsetHeight;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Theme Management
+    const themeToggle = document.querySelector('.theme-toggle');
+    const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+    
+    // Set initial theme
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme) {
+        document.documentElement.setAttribute('data-theme', currentTheme);
+        updateThemeIcon(currentTheme);
+    } else if (prefersDarkScheme.matches) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        updateThemeIcon('dark');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+
+    // Update theme icon
+    function updateThemeIcon(theme) {
+        const icon = themeToggle.querySelector('i');
+        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+    }
+
     // Mobile Navigation Toggle
     const navToggle = document.querySelector('.nav-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -26,13 +79,54 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         lastScroll = currentScroll;
-    });
+    });    // Form submission to Airtable with enhanced handling
+    async function submitToAirtable(formData) {
+        try {
+            const submitButton = document.querySelector('.cta-button');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Joining...';
+
+            const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_CONFIG.BASE_ID}/${AIRTABLE_CONFIG.TABLE_NAME}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${AIRTABLE_CONFIG.API_KEY}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fields: {
+                        'First Name': formData.get('firstName'),
+                        'Last Name': formData.get('lastName'),
+                        'Gender Interest': formData.get('gender'),
+                        'Email': formData.get('email'),
+                        'Phone': formData.get('phone'),
+                        'Joined Date': new Date().toISOString()
+                    }
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            showToast('Welcome to the Trinity family! 🙏');
+            localStorage.setItem('formSubmitted', 'true');
+            return true;
+        } catch (error) {
+            console.error('Error:', error);
+            showToast('Something went wrong. Please try again.', 'error');
+            return false;
+        } finally {
+            const submitButton = document.querySelector('.cta-button');
+            submitButton.disabled = false;
+            submitButton.textContent = 'Join The Trinity';
+        }
+    }
 
     // Form Handling
     const signupForm = document.getElementById('signupForm');
     const successMessage = document.getElementById('successMessage');
 
-    signupForm.addEventListener('submit', (e) => {
+    signupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         // Validate form
@@ -46,14 +140,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (isValid) {
-            // Show success message
-            successMessage.classList.remove('hidden');
-            signupForm.reset();
+            // Submit to Airtable
+            const success = await submitToAirtable(formData);
+            
+            if (success) {
+                // Show success message
+                successMessage.classList.remove('hidden');
+                signupForm.reset();
 
-            // Hide success message after 5 seconds
-            setTimeout(() => {
-                successMessage.classList.add('hidden');
-            }, 5000);
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 5000);
+            } else {
+                alert('There was an error submitting the form. Please try again.');
+            }
         }
     });
 
