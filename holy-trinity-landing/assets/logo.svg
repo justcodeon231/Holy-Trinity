@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="50" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+  <text x="10" y="35" font-family="Arial" font-size="24" fill="#000">HOLY TRINITY</text>
+  <path d="M185 15 h15 v15 h-15 z" fill="#DAA520"/>
+</svg>

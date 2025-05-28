@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Holy Trinity - Faith. Fashion. Forward.</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header class="navbar">
+        <nav class="nav-container">
+            <a href="#" class="logo">
+                <img src="assets/logo.svg" alt="Holy Trinity Logo">
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span class="hamburger"></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero" class="hero">
+            <div class="hero-content">
+                <h1>Faith. Fashion. Forward.</h1>
+                <p class="subhead">Be first to experience the drop. A movement wrapped in purpose.</p>
+            </div>
+        </section>
+
+        <section id="signup" class="signup">
+            <form id="signupForm" class="signup-form">
+                <h2>Join The Movement</h2>
+                <div class="form-group">
+                    <input type="text" id="firstName" name="firstName" required>
+                    <label for="firstName">First Name</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="lastName" name="lastName" required>
+                    <label for="lastName">Last Name</label>
+                </div>
+                <div class="form-group">
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Interest</option>
+                        <option value="men">Men</option>
+                        <option value="women">Women</option>
+                        <option value="unisex">Unisex</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" required>
+                    <label for="email">Email</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" required>
+                    <label for="phone">Phone</label>
+                </div>
+                <button type="submit" class="cta-button">Join The Trinity</button>
+                <div id="successMessage" class="success-message hidden">
+                    Welcome to the Trinity family! 🙏
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="social-links">
+            <a href="https://instagram.com" target="_blank" aria-label="Follow us on Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/" target="_blank" aria-label="Contact us on WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+        </div>
+        <p class="footer-copy">No spam. Just soul.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
