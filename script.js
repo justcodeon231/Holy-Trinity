@@ -34,10 +34,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const root = document.documentElement;
         const currentScroll = window.scrollY;
+        const logo = document.querySelector('.logo img');
         
         // Start transition
         root.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
+        
+        // Switch logo based on theme
+        logo.src = theme === 'dark' ? 'assets/dark-mode-logo.svg' : 'assets/light-mode-logo.svg';
+        logo.style.transition = 'opacity 0.3s ease';
+        logo.style.opacity = '0';
+        setTimeout(() => {
+            logo.style.opacity = '1';
+        }, 150);
         
         // Animate icon
         updateThemeIcon(theme);

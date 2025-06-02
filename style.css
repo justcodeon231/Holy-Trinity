@@ -16,6 +16,7 @@
     --shadow-inset: inset 0 2px 4px rgba(0,0,0,0.2);
     --transition: all 0.3s ease-in-out;
     --focus-ring: 0 0 0 2px var(--color-accent);
+    --color-bg-rgb: 250, 249, 246;
 }
 
 [data-theme="dark"] {
@@ -31,6 +32,7 @@
     --shadow-glow: 0 0 20px rgba(218,165,32,0.4);
     --shadow-glow-strong: 0 0 25px rgba(218,165,32,0.6);
     --focus-ring: 0 0 0 2px var(--color-accent);
+    --color-bg-rgb: 17, 17, 17;
 }
 
 * {
@@ -113,26 +115,75 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)),
-                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 15 L85 85 L15 85 Z" fill="%23DAA520" opacity="0.1"/></svg>');
-    background-size: cover;
-    background-position: center;
+    position: relative;
     padding: 2rem;
     margin-top: 60px;
+    background: var(--color-bg);
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 20%, var(--color-accent) 0%, transparent 25%),
+        radial-gradient(circle at 80% 80%, var(--color-accent) 0%, transparent 25%);
+    opacity: 0.05;
+    filter: blur(60px);
+    transition: var(--transition);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    padding: 3rem;
+    background: rgba(var(--color-bg-rgb), 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 
+        0 4px 30px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transform: translateY(0);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hero-content:hover {
+    transform: translateY(-5px);
 }
 
 .hero-content h1 {
-    font-size: clamp(2.5rem, 8vw, 4rem);
+    font-size: clamp(2.5rem, 8vw, 4.5rem);
     font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-content .subhead {
-    font-size: clamp(1rem, 4vw, 1.5rem);
-    color: #666;
+    font-size: clamp(1.1rem, 4vw, 1.6rem);
+    color: var(--color-text-muted);
     max-width: 600px;
     margin: 0 auto;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.8s forwards 0.3s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Signup Form */
