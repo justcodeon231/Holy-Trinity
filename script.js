@@ -116,28 +116,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         lastScroll = currentScroll;
-    });    // Form submission to Airtable with enhanced handling
-    async function submitToAirtable(formData) {
+    });    // Form submission to Airtable with enhanced handling    async function submitForm(formData, retryCount = 0) {
         try {
             const submitButton = document.querySelector('.cta-button');
             submitButton.disabled = true;
             submitButton.textContent = 'Joining...';
 
-            const response = await fetch(`https://api.airtable.com/v0/${AIRTABLE_CONFIG.BASE_ID}/${AIRTABLE_CONFIG.TABLE_NAME}`, {
+            const response = await fetch(API_CONFIG.SUBMIT_URL, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${AIRTABLE_CONFIG.API_KEY}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    fields: {
-                        'First Name': formData.get('firstName'),
-                        'Last Name': formData.get('lastName'),
-                        'Gender Interest': formData.get('gender'),
-                        'Email': formData.get('email'),
-                        'Phone': formData.get('phone'),
-                        'Joined Date': new Date().toISOString()
-                    }
+                    firstName: formData.get('firstName'),
+                    lastName: formData.get('lastName'),
+                    gender: formData.get('gender'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone')
                 })
             });
 
