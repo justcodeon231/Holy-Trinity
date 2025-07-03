@@ -1,10 +1,3 @@
-// Configuration
-const AIRTABLE_CONFIG = {
-    API_KEY: 'YOUR_API_KEY', // Replace with your Airtable API key
-    BASE_ID: 'YOUR_BASE_ID', // Replace with your base ID
-    TABLE_NAME: 'Signups'
-};
-
 // Toast notification helper
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
@@ -116,81 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         lastScroll = currentScroll;
-    });    // Form submission to Airtable with enhanced handling    async function submitForm(formData, retryCount = 0) {
-        try {
-            const submitButton = document.querySelector('.cta-button');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Joining...';
-
-            const response = await fetch(API_CONFIG.SUBMIT_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    firstName: formData.get('firstName'),
-                    lastName: formData.get('lastName'),
-                    gender: formData.get('gender'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone')
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            showToast('Welcome to the Trinity family! 🙏');
-            localStorage.setItem('formSubmitted', 'true');
-            return true;
-        } catch (error) {
-            console.error('Error:', error);
-            showToast('Something went wrong. Please try again.', 'error');
-            return false;
-        } finally {
-            const submitButton = document.querySelector('.cta-button');
-            submitButton.disabled = false;
-            submitButton.textContent = 'Join The Trinity';
-        }
-    }
-
-    // Form Handling
-    const signupForm = document.getElementById('signupForm');
-    const successMessage = document.getElementById('successMessage');
-
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        // Validate form
-        const formData = new FormData(signupForm);
-        let isValid = true;
-        
-        formData.forEach((value) => {
-            if (!value.trim()) {
-                isValid = false;
-            }
-        });
-
-        if (isValid) {
-            // Submit to Airtable
-            const success = await submitToAirtable(formData);
-            
-            if (success) {
-                // Show success message
-                successMessage.classList.remove('hidden');
-                signupForm.reset();
-
-                // Hide success message after 5 seconds
-                setTimeout(() => {
-                    successMessage.classList.add('hidden');
-                }, 5000);
-            } else {
-                alert('There was an error submitting the form. Please try again.');
-            }
-        }
-    });
-
-    // Form field validation
+    });    // Form field validation
     function validateFormField(input) {
         const field = input.getAttribute('name');
         const value = input.value.trim();
@@ -234,13 +153,6 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('blur', () => validateFormField(input));
         input.addEventListener('input', () => validateFormField(input));
     });
-
-    // Check if form was already submitted
-    if (localStorage.getItem('formSubmitted') === 'true') {
-        const submitButton = document.querySelector('.cta-button');
-        submitButton.disabled = true;
-        submitButton.textContent = 'Already Joined ✓';
-    }
 
     // Smooth Scroll for Navigation Links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
